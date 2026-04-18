@@ -29,7 +29,7 @@ python3.10 -m venv .venv
 ## 3 — Env + state
 
 ```bash
-install -m 0600 deploy/.env.vps .env
+install -m 0600 deploy/env.vps.example .env
 install -d -m 0755 data data/buckets data/daily_reports data/klines_cache
 ```
 

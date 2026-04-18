@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     hl_circuit_cooldown_periods: int = 4
     hl_paper_only: bool = True
 
+    # Phase 2 wallet identity (optional; Phase 1 never reads these).
+    hl_wallet_address: str = ""
+    hl_wallet_private_key: str = ""  # MUST come from env/secret-store; never commit
+
     @property
     def taker_fee_frac(self) -> float:
         return self.hl_taker_fee_bps / 10_000.0
