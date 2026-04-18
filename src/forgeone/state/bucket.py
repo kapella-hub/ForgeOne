@@ -7,7 +7,9 @@ from __future__ import annotations
 
 import os
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
+
+UTC = timezone.utc  # datetime.UTC is Python 3.11+; this keeps 3.10 compat
 from pathlib import Path
 
 import orjson

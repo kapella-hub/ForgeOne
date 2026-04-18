@@ -12,7 +12,9 @@ import argparse
 import statistics
 import sys
 from collections import Counter
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+UTC = timezone.utc  # datetime.UTC is Python 3.11+; this keeps 3.10 compat
 from pathlib import Path
 
 import httpx
