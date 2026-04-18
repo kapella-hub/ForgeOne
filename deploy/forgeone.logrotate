@@ -1,0 +1,10 @@
+/opt/forgeone/data/hyperliquid_paper_trades.jsonl /opt/forgeone/data/hyperliquid_paper_daily.jsonl /opt/forgeone/data/daily_reports/*.txt {
+    daily
+    missingok
+    notifempty
+    rotate 60
+    compress
+    delaycompress
+    copytruncate
+    create 0644 root root
+}

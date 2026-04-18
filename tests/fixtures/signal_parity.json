@@ -1,0 +1,83 @@
+{
+  "_meta": {
+    "description": "Parity fixtures for src/forgeone/signals/continuation.py. Expected values hand-computed against the source helpers at polymarket-bot/run_sniper.py:87-120 during the port. Do NOT mechanically regenerate without also rerunning the 72h backtest parity script.",
+    "source_ref": "polymarket-bot/run_sniper.py@674c82e lines 87-120, 503-528, 290-291",
+    "port_commit_date": "2026-04-17"
+  },
+
+  "get_price_at": [
+    {"name": "empty_history", "history": [], "target_ts": 1000.0, "expected": null},
+    {"name": "single_tick_before_target", "history": [[500.0, 100.0]], "target_ts": 1000.0, "expected": 100.0},
+    {"name": "single_tick_exact_target", "history": [[1000.0, 100.0]], "target_ts": 1000.0, "expected": 100.0},
+    {"name": "single_tick_after_target", "history": [[1500.0, 100.0]], "target_ts": 1000.0, "expected": null},
+    {"name": "multiple_ticks_walk_forward",
+     "history": [[100.0, 50.0], [200.0, 60.0], [300.0, 70.0], [400.0, 80.0]],
+     "target_ts": 250.0, "expected": 60.0},
+    {"name": "all_after_target",
+     "history": [[800.0, 100.0], [900.0, 101.0]],
+     "target_ts": 700.0, "expected": null}
+  ],
+
+  "compute_move_pct": [
+    {"name": "empty_history",
+     "history": [], "now_ts": 1000.0, "lookback_sec": 300, "expected": null},
+    {"name": "single_tick_len_lt_2",
+     "history": [[1000.0, 100.0]], "now_ts": 1000.0, "lookback_sec": 300, "expected": null},
+    {"name": "move_up_1pct",
+     "history": [[1000.0, 100.0], [1300.0, 101.0]], "now_ts": 1300.0, "lookback_sec": 300,
+     "expected": 0.01},
+    {"name": "move_down_half_pct",
+     "history": [[1000.0, 200.0], [1300.0, 199.0]], "now_ts": 1300.0, "lookback_sec": 300,
+     "expected": -0.005},
+    {"name": "p_old_none_returns_none",
+     "history": [[1400.0, 100.0], [1500.0, 101.0]], "now_ts": 1500.0, "lookback_sec": 300,
+     "expected": null},
+    {"name": "p_old_zero_returns_none",
+     "history": [[1000.0, 0.0], [1100.0, 100.0]], "now_ts": 1100.0, "lookback_sec": 50,
+     "expected": null}
+  ],
+
+  "reversal_counter_move": [
+    {"name": "empty_history",
+     "history": [], "now_ts": 1000.0, "window_sec": 60, "direction": "up", "expected": 0.0},
+    {"name": "single_tick_no_peak",
+     "history": [[1000.0, 100.0]], "now_ts": 1000.0, "window_sec": 60, "direction": "up",
+     "expected": 0.0},
+    {"name": "up_peak_then_drop",
+     "history": [[0.0, 100.0], [30.0, 101.0], [60.0, 102.0], [90.0, 101.0]],
+     "now_ts": 90.0, "window_sec": 60, "direction": "up",
+     "_calc": "cutoff=30, recent=[101,102,101], p_now=101, max=102, (102-101)/101",
+     "expected": 0.009900990099009901},
+    {"name": "down_trough_then_bounce",
+     "history": [[0.0, 100.0], [30.0, 99.0], [60.0, 98.0], [90.0, 99.0]],
+     "now_ts": 90.0, "window_sec": 60, "direction": "down",
+     "_calc": "cutoff=30, recent=[99,98,99], p_now=99, min=98, (99-98)/99",
+     "expected": 0.010101010101010102},
+    {"name": "no_counter_move_up",
+     "history": [[0.0, 100.0], [30.0, 101.0], [60.0, 102.0]],
+     "now_ts": 60.0, "window_sec": 60, "direction": "up",
+     "expected": 0.0},
+    {"name": "all_ticks_outside_window",
+     "history": [[0.0, 100.0], [10.0, 101.0]],
+     "now_ts": 200.0, "window_sec": 60, "direction": "up",
+     "expected": 0.0}
+  ],
+
+  "period_ts": [
+    {"name": "at_period_boundary", "now_ts": 1760630400.0, "expected": 1760630400},
+    {"name": "10s_into_period", "now_ts": 1760630410.0, "expected": 1760630400},
+    {"name": "one_sec_before_next_period", "now_ts": 1760631299.999, "expected": 1760630400},
+    {"name": "exact_next_period_start", "now_ts": 1760631300.0, "expected": 1760631300},
+    {"name": "int_truncation_matches_source",
+     "_calc": "int(1760630400.9) = 1760630400, 1760630400 // 900 * 900 = 1760630400",
+     "now_ts": 1760630400.9, "expected": 1760630400}
+  ],
+
+  "in_active_window": [
+    {"name": "before_window", "now_ts": 1760630400.0, "_elapsed": 0, "expected": false},
+    {"name": "at_window_start_240", "now_ts": 1760630640.0, "_elapsed": 240, "expected": true},
+    {"name": "middle_of_window", "now_ts": 1760630800.0, "_elapsed": 400, "expected": true},
+    {"name": "at_window_end_600", "now_ts": 1760631000.0, "_elapsed": 600, "expected": true},
+    {"name": "just_past_end_601", "now_ts": 1760631001.0, "_elapsed": 601, "expected": false}
+  ]
+}

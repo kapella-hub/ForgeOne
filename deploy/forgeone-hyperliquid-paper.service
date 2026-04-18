@@ -1,0 +1,21 @@
+[Unit]
+Description=ForgeOne — Hyperliquid continuation-mode paper trader
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/forgeone
+EnvironmentFile=/opt/forgeone/.env
+ExecStart=/opt/forgeone/.venv/bin/python -m forgeone.strategies.hyperliquid_paper
+Restart=always
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+# Logs to journalctl; structured JSON tape goes to /opt/forgeone/data/*.jsonl
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+build/
+dist/
+
+# Virtual envs
+venv/
+.venv/
+env/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Runtime state (bucket state + trade tapes + daily summaries live here on the VPS)
+data/buckets/
+data/hyperliquid_paper_trades.jsonl
+data/hyperliquid_paper_daily.jsonl
+data/daily_reports/
+
+# Klines cache: committed klines are under tests/fixtures/; data/klines_cache/ is runtime
+data/klines_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
